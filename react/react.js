@@ -1,46 +1,71 @@
-//
-// This is only a SKELETON file for the 'React' exercise. It's been provided as a
-// convenience to get you started writing code faster.
-//
-
 export class InputCell {
   constructor(value) {
-    throw new Error(
-      'Remove this statement and implement this function'
-    );
+    this.value = value;
+    this.computeCells = []
+  }
+
+  addComputeCell(computeCell) {
+    this.computeCells.push(computeCell);
+    this.computeCells = Array.from(new Set(this.computeCells));
   }
 
   setValue(value) {
-    throw new Error(
-      'Remove this statement and implement this function'
-    );
+    this.value = value;
+    this.computeCells.forEach(computeCell => {
+      computeCell.reCompute();
+    });
   }
 }
 
 export class ComputeCell {
   constructor(inputCells, fn) {
-    throw new Error(
-      'Remove this statement and implement this function'
-    );
+    this.inputCells = inputCells;
+    this.computeFn = fn;
+    this.callbacks = [];
+    this._value = this.computeFn(this.inputCells);
+    inputCells.forEach(inputCell => {
+      inputCell.addComputeCell(this);
+    });
+  }
+
+  get value() {
+    return this._value;
+  }
+
+  set value(val) {
+    this._value = val;
+  }
+
+  reCompute() {
+    let oldValue = this.value;
+    this.value = this.computeFn(this.inputCells);
+    if (oldValue !== this.value) {
+      this.callbacks.forEach(callback => {
+        callback.storeValue(this);
+      });
+    }
   }
 
   addCallback(cb) {
-    throw new Error(
-      'Remove this statement and implement this function'
-    );
+    this.callbacks.push(cb);
   }
 
   removeCallback(cb) {
-    throw new Error(
-      'Remove this statement and implement this function'
-    );
+    this.callbacks = this.callbacks.filter((el) => el !== cb);
   }
 }
 
 export class CallbackCell {
   constructor(fn) {
-    throw new Error(
-      'Remove this statement and implement this function'
-    );
+    this.fn = fn;
+    this._values = []
+  }
+
+  storeValue(cell) {
+    this._values.push(this.fn(cell))
+  }
+
+  get values() {
+    return this._values;
   }
 }

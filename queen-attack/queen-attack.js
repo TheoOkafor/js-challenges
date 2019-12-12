@@ -7,110 +7,34 @@ export class QueenAttack {
         }
         this.white = position.white;
         this.black = position.black;
-        this.board = ['_ _ _ _ _ _ _ _',
-            '_ _ _ _ _ _ _ _',
-            '_ _ _ _ _ _ _ _',
-            '_ _ _ _ _ _ _ _',
-            '_ _ _ _ _ _ _ _',
-            '_ _ _ _ _ _ _ _',
-            '_ _ _ _ _ _ _ _',
-            '_ _ _ _ _ _ _ _\n']
-        this.whitesLegalMoves = [];
     }
 
     toString() {
-        const board = this.board.map((row, index) => {
-            let newRow = row.split(' ');
-            if (index === this.white[0]) {
-                newRow[this.white[1]] = 'W';
-            }
-            if (index === this.black[0]) {
-                newRow[this.black[1]] = 'B';
-            }
-            return newRow.join(' ');
-        })
-        return board.join('\n');
-    }
+        const [xWhite, yWhite] = this.white;
+        const [xBlack, yBlack] = this.black;
+        const emptyLine = Array(8).fill('_');
+        const board = [];
+        for (let i = 0; i < 8; i += 1) {
+            board.push(emptyLine.slice());
+        }
+        board[xWhite][yWhite] = "W";
+        board[xBlack][yBlack] = "B";
+        const result = board.reduce(
+        (accum, lineArray) => accum + lineArray.join(' ') + '\n', '');
 
-    getUps(x, y) {
-        x -= 1;
-        while (x >= 0) {
-            this.whitesLegalMoves.push([x, y]);
-            x -= 1;
-        }
-    }
-    
-    getDowns(x, y) {
-        x += 1;
-        while (x <= 7) {
-            this.whitesLegalMoves.push([x, y]);
-            x += 1;
-        }
-    }
-    
-    getLefts(x, y) {
-        y -= 1;
-        while (y >= 0) {
-            this.whitesLegalMoves.push([x, y]);
-            y -= 1;
-        }
-    }
-
-    getRights(x, y) {
-        y += 1;
-        while (y <= 7) {
-            this.whitesLegalMoves.push([x, y]);
-            y += 1;
-        }
-    }
-    
-    getTopLeftDiags(x, y) {
-        while (x > 0 && y > 0) {
-            x -= 1;
-            y -= 1;
-            this.whitesLegalMoves.push([x, y]);
-        }
-    }
-    
-    getTopRightDiags(x, y) {
-        while (x > 0 && y <= 7) {
-            x -= 1;
-            y += 1;
-            this.whitesLegalMoves.push([x, y]);
-        }
-    }
-    
-    getBottomLeftDiags(x, y) {
-        while (x <= 7 && y > 0) {
-            x += 1;
-            y -= 1;
-            this.whitesLegalMoves.push([x, y]);
-        }
-    }
-    
-    getBottomRightDiags(x, y) {
-        x += 1;
-        y += 1;
-        while (x <= 7 && y <= 7) {
-            this.whitesLegalMoves.push([x, y]);
-            x += 1;
-            y += 1;
-        }
+        return result;
     }
 
     canAttack() {
-        this.getUps(this.white[0], this.white[1]);
-        this.getDowns(this.white[0], this.white[1]);
-        this.getLefts(this.white[0], this.white[1]);
-        this.getRights(this.white[0], this.white[1]);
-        this.getTopLeftDiags(this.white[0], this.white[1])
-        this.getTopRightDiags(this.white[0], this.white[1]);
-        this.getBottomLeftDiags(this.white[0], this.white[1]);
-        this.getBottomRightDiags(this.white[0], this.white[1]);
+        const [xWhite, yWhite] = this.white;
+        const [xBlack, yBlack] = this.black;
 
-        const match = this.whitesLegalMoves
-            .find(coord => coord[0] === this.black[0] && coord[1] === this.black[1]);
-        const result = match ? true : false;
-        return result;
+        const hasDiagonalAttack = Math.abs(xWhite - xBlack) === Math.abs(yWhite - yBlack);
+        
+        const canAttack = xWhite === xBlack // check the row
+            || yWhite === yBlack // check the column
+            || hasDiagonalAttack
+
+        return canAttack;
     }
 }

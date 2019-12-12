@@ -43,7 +43,7 @@ describe('Queens', () => {
       '_ _ _ _ _ _ _ _',
       '_ _ _ _ _ _ _ _',
       '_ _ _ _ _ _ _ _',
-      '_ _ _ _ _ _ _ W'].join('\n');
+      '_ _ _ _ _ _ _ W\n'].join('\n');
     expect(queens.toString()).toEqual(board);
   });
 
