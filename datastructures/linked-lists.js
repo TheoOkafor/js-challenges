@@ -5,14 +5,6 @@ class Node {
   }
 }
 
-
-// const node1 = new Node(3);
-// const node2 = new Node(5);
-
-// node1.next = node2
-
-// console.log(node1.next)
-
 class LinkedList {
   constructor() {
     this.head = null;
@@ -101,4 +93,3 @@ console.log(myLinkedList.removeNodeAt(1));
 console.log(myLinkedList.addNode(6));
 console.log(myLinkedList.addNodeAt(4, 35));
 console.log(myLinkedList);
-
